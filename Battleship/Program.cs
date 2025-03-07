@@ -46,9 +46,12 @@
             Console.WriteLine("Starting Two Player Mode!");
 
             Player player1 = new Player("Player 1", false);
+            List<Coordinate> coordinates = new List<Coordinate>();
+            Ship Destroyer = new Ship("Destroyer", coordinates);
+
             PlayerBoard player1Grid = new PlayerBoard();
 
-            Console.WriteLine("\nPlayer 1, place your ships.");
+            Console.WriteLine("Player 1, place your ships.");
 
             Player player2AI = new Player("Player 2", true);
             PlayerBoard player2Grid = new PlayerBoard();

@@ -2,6 +2,7 @@
 {
     public class Player
     {
+        Disctionary<string, Ship> playerFleet = new Dictionary<string, Ship>();
         public string Name { get; private set; }
         public bool isAI { get; private set; }
 
@@ -15,9 +16,9 @@
 
         }
 
-        static void AddShip(Ships ship)                                                          
+        public void AddShip(Ship ship)                                                          
         {
-
+            playerFleet.add(ship.name, ship);                      
         }
     }
 }
