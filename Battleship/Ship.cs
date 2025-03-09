@@ -1,25 +1,23 @@
 ﻿namespace Battleship
 {
-    public class Ship
+    class Ship
     {
-        public string name;
-        public List<Coordinate> positions;
-        public bool isSunk;
+        public string Name;
+        public int Length;
+        public List<(int, int)> Coordinates;
+        public int Hits;
 
-        public Ship(string inputName, List<Coordinate> inputPositions)
+        public Ship(string name, int length)
         {
-            name = inputName;
-            positions = inputPositions;
-            isSunk = false;
+            Name = name;
+            Length = length;
+            Coordinates = new List<(int, int)>();
+            Hits = 0;
+        }
+
+        public bool IsSunk()
+        {
+            return Hits >= Length;
         }
     }
 }
-
-/*
-a. The Ship class will represent a ship on the board.
-b.It should have properties like:
-i.Name: Name of the ship.
-ii. Length: The length of the ship (e.g., 5 for an aircraft carrier).
-iii. Coordinates: The list of coordinates that the ship occupies on the grid.
-iv. IsSunk: A flag indicating whether the ship is sunk. 
-*/

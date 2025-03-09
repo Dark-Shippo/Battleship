@@ -1,88 +1,44 @@
 ﻿namespace Battleship
 {
-    internal class Program
+    class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            MainMenu();
-        }
+            bool isAI = false;
+            BasePlayer player = new BasePlayer(isAI);
+            BasePlayer ai = new BasePlayer(isAI = true);
+            Grid aiGrid = ai.GetGrid();
+            Grid playerGrid = player.GetGrid();
+            int shots = 0;
 
-        static void MainMenu()
-        {
-            bool isPlaying = true;
-            while (isPlaying)
+            Console.WriteLine("Welcome to Battleship! Press Enter to start.");
+            Console.ReadLine();
+
+            while (true)
             {
-                Console.WriteLine(
-                    " _           _   _   _           _     _       \r\n| |         | | | | | |         | |   (_)      \r\n| |__   __ _| |_| |_| | ___  ___| |__  _ _ __  \r\n| '_ \\ / _` | __| __| |/ _ \\/ __| '_ \\| | '_ \\ \r\n| |_) | (_| | |_| |_| |  __/\\__ \\ | | | | |_) |\r\n|_.__/ \\__,_|\\__|\\__|_|\\___||___/_| |_|_| .__/ \r\n                                        | |    \r\n                                        |_|  \nPress 1 to play singleplayer! \nPress 2 to play two player!");
-                ConsoleKeyInfo menuInput = Console.ReadKey();
-                switch (menuInput.Key)
+                Console.Clear();
+                Console.WriteLine("AI's Board (Shots Fired):");
+                aiGrid.DisplayBoard(false);
+
+                Console.WriteLine("\nYour Board:");
+                playerGrid.DisplayBoard(false);
+                Console.WriteLine("Enter to fire random shots");
+                Console.ReadLine();
+                player.Attack(aiGrid);
+
+                shots++;
+                if (aiGrid.CheckWin())
                 {
-                    case ConsoleKey.D1:
-                    case ConsoleKey.NumPad1:
-                        isPlaying = false;
-                        SinglePlayer();
-                        break;
-                    case ConsoleKey.D2:
-                    case ConsoleKey.NumPad2:     
-                        isPlaying = false;
-                        TwoPlayer();
-                        break;
-                    default:
-                        Console.WriteLine("Invalid Choice. Try again.");
-                        break;
+                    Console.WriteLine("You win in " + shots + " shots!");
+                    break;
+                }
+                ai.Attack(playerGrid);
+                if (playerGrid.CheckWin())
+                {
+                    Console.WriteLine("AI wins!");
+                    break;
                 }
             }
         }
-
-        static void SinglePlayer()
-        {
-            int Player1Sunk = 0;
-            int Player2Sunk = 0;
-
-            bool player1Win = false;
-            bool player2Win = false;
-
-            Console.Clear();
-            Console.WriteLine("Starting Two Player Mode!");
-
-            Player player1 = new Player("Player 1", false);
-            List<Coordinate> coordinates = new List<Coordinate>();
-            Ship Destroyer = new Ship("Destroyer", coordinates);
-
-            PlayerBoard player1Grid = new PlayerBoard();
-
-            Console.WriteLine("Player 1, place your ships.");
-
-            Player player2AI = new Player("Player 2", true);
-            PlayerBoard player2Grid = new PlayerBoard();
-
-        }
-
-        static void TwoPlayer()
-        {
-            int Player1Sunk = 0;
-            int Player2Sunk = 0;
-
-            bool player1Win = false;
-            bool player2Win = false;
-
-            Console.Clear();
-            Console.WriteLine("Starting Two Player Mode!");
-
-            Player player1 = new Player("Player 1", false);
-            PlayerBoard player1Grid = new PlayerBoard();
-            Console.WriteLine("\nPlayer 1, place your ships.");
-
-            Player player2 = new Player("Player 2", false);
-            PlayerBoard player2Grid = new PlayerBoard();
-            Console.WriteLine("\nPlayer 2, place your ships."); 
-        }
     }
 }
-/*
-The main class will handle the game flow:
-i. Display the game board.
-ii. Let each player take turns making guesses.
-iii. Display messages when a player hits or misses a ship.
-iv. Determine when the game ends (all ships are sunk).
-*/
