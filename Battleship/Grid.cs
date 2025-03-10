@@ -77,6 +77,66 @@
             return true;
         }
 
+        public void PlaceShipAI(Ship ship, string direction)
+        {
+            List<(int, int)> tempCoordinates = new List<(int, int)>();
+            bool isPlaced = false;
+            Random rnd = new Random();
+            int startX = rnd.Next(0, 10);
+            int startY = rnd.Next(0, 10);
+
+
+            while (direction == "H" && CheckBoundary(startX, ship, 0))
+            { 
+                startX = rnd.Next(0, 10); 
+            }
+
+            while (direction == "V" && CheckBoundary(startY, ship, 1))
+            { 
+                startY = rnd.Next(0, 10); 
+            }
+
+            while (!isPlaced)
+            {
+                for (int i = 0; i < ship.Length; i++)
+                {
+                    int x = startX;
+                    int y = startY;
+
+                    if (direction == "V")
+                    {
+                        y += i;
+                    }
+                    if (direction == "H")
+                    {
+                        x += i;
+                    }
+
+                    while (Board[x, y] != '~' ||
+                            (direction == "H" && CheckBoundary(startX, ship, 0)) ||
+                            (direction == "V" && CheckBoundary(startY, ship, 1)))
+                    {
+                        startX = rnd.Next(0, 10);
+                        startY = rnd.Next(0, 10);
+                        direction = "H";
+                        if (rnd.Next(0, 2) == 0)
+                        {
+                            direction = "V";
+                        }
+
+                    }
+                    tempCoordinates.Add((x, y));
+                }
+                foreach (var coord in tempCoordinates)
+                {
+                    Board[coord.Item1, coord.Item2] = 'S';
+                    isPlaced = true;
+                }
+                ship.Coordinates.AddRange(tempCoordinates);
+                Ships.Add(ship);
+            }
+        }
+
         public bool MakeGuess(int x, int y)
         {
             if (Board[x, y] == 'S')
@@ -102,6 +162,18 @@
                 if (!ship.IsSunk()) return false;
             }
             return true;
+        }
+
+        private bool CheckBoundary(int XYValue, Ship ship, int i)
+        {
+            if (!(XYValue + ship.Length < Board.GetLength(i)))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

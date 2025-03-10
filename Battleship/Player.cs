@@ -9,14 +9,94 @@
         {
             grid = new Grid();
             rand = new Random();
-            PlaceShips();
+
+            if (!isAI)
+            {
+                PlaceFleetPlayer();
+            }
+            else
+            {
+                PlaceFleetAI();
+            }
         }
 
-        public void PlaceShips()
+        public void PlaceFleetPlayer()
         {
-            bool placed = false;
-            int x;
-            int y;
+            int shipsPlaced = 0;
+
+            while (shipsPlaced < 5)
+            {
+                Console.WriteLine("Select a ship to place! \n1. Cruiser \n2. Submarine \n3. Destroyer \n4. Battleship \n5. Carrier");
+                ConsoleKeyInfo input = Console.ReadKey();
+
+                string selectedShip = "";
+                int shipLength = 0;
+
+                switch (input.Key)
+                {
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        selectedShip = "Cruiser";
+                        shipLength = 2;
+                        break;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        selectedShip = "Submarine";
+                        shipLength = 3;
+                        break;
+                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
+                        selectedShip = "Destroyer";
+                        shipLength = 3;
+                        break;
+                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
+                        selectedShip = "Battleship";
+                        shipLength = 4;
+                        break;
+                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
+                        selectedShip = "Carrier";
+                        shipLength = 5;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid Choice!");
+                        continue;
+                }
+                Console.WriteLine("\nEnter your coordinates and direction (H/V) \n Example: 2 5 H");
+                string[] inputs = Console.ReadLine().Split(' ');
+                if (inputs.Length == 3 &&
+                    int.TryParse(inputs[0], out int x) &&
+                    int.TryParse(inputs[1], out int y) &&
+                    (inputs[2].ToUpper() == "H" || inputs[2].ToUpper() == "V"))
+                {
+                    string direction = inputs[2].ToUpper();
+                    bool placed = grid.PlaceShip(new Ship(selectedShip, shipLength), x, y, direction);
+
+                    if (placed)
+                    {
+                        Console.WriteLine("Ship placed successfully!");
+                        shipsPlaced++;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid placement! Try again.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid format try again.");
+                }
+            }
+            
+            //grid.PlaceShip(new Ship("Destroyer", 3), x, y, direction);
+            //grid.PlaceShip(new Ship("Battleship", 4), x, y, direction);
+            //grid.PlaceShip(new Ship("Carrier", 5), x, y, direction);
+        }
+
+        public void PlaceFleetAI()
+        {
+            Random random = new Random();
 
             string direction = "H";
             if (rand.Next(0, 2) == 0)
@@ -24,35 +104,40 @@
                 direction = "V";
             }
 
-            while (!placed)
-            {
-                Console.WriteLine("Please select your");
-            }
+            grid.PlaceShipAI(new Ship("Cruiser", 2), direction);
 
-            grid.PlaceShip(new Ship("Cruiser", 2), x, y, direction);
-            grid.PlaceShip(new Ship("Submarine", 3), x, y, direction);
-            grid.PlaceShip(new Ship("Destroyer", 3), x, y, direction);
-            grid.PlaceShip(new Ship("Battleship", 4), x, y, direction);
-            grid.PlaceShip(new Ship("Carrier", 5), x, y, direction);
-        }
-
-        public void PlaceShipsAI()
-        {
-            Random rand = new Random();
-            int x = rand.Next(0, 10);
-            int y = rand.Next(0, 10);
-
-            string direction = "H";
+            direction = "H";
             if (rand.Next(0, 2) == 0)
             {
                 direction = "V";
             }
 
-            grid.PlaceShip(new Ship("Cruiser", 2), x, y, direction);
-            grid.PlaceShip(new Ship("Submarine", 3), x, y, direction);
-            grid.PlaceShip(new Ship("Destroyer", 3), x, y, direction);
-            grid.PlaceShip(new Ship("Battleship", 4), x, y, direction);
-            grid.PlaceShip(new Ship("Carrier", 5), x, y, direction);
+            grid.PlaceShipAI(new Ship("Submarine", 3), direction);
+
+            direction = "H";
+            if (rand.Next(0, 2) == 0)
+            {
+                direction = "V";
+            }
+
+            grid.PlaceShipAI(new Ship("Destroyer", 3), direction);
+
+            direction = "H";
+            if (rand.Next(0, 2) == 0)
+            {
+                direction = "V";
+            }
+
+            grid.PlaceShipAI(new Ship("Battleship", 4), direction);
+
+            direction = "H";
+            if (rand.Next(0, 2) == 0)
+            {
+                direction = "V";
+            }
+
+            grid.PlaceShipAI(new Ship("Carrier", 5), direction);
+
         }
 
         public bool Attack(Grid enemyGrid)
@@ -71,5 +156,7 @@
         {
             return grid;
         }
+
+
     }
 }
