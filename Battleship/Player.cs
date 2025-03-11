@@ -22,11 +22,11 @@
 
         public void PlaceFleetPlayer()
         {
-            int shipsPlaced = 0;
-
-            while (shipsPlaced < 5)
+            List<string> placedShips = new List<string>(){};
+            while (placedShips.Count < 5)
             {
                 Console.WriteLine("Select a ship to place! \n1. Cruiser \n2. Submarine \n3. Destroyer \n4. Battleship \n5. Carrier");
+                grid.DisplayBoard(false);
                 ConsoleKeyInfo input = Console.ReadKey();
 
                 string selectedShip = "";
@@ -63,35 +63,38 @@
                         Console.WriteLine("Invalid Choice!");
                         continue;
                 }
-                Console.WriteLine("\nEnter your coordinates and direction (H/V) \n Example: 2 5 H");
-                string[] inputs = Console.ReadLine().Split(' ');
-                if (inputs.Length == 3 &&
-                    int.TryParse(inputs[0], out int x) &&
-                    int.TryParse(inputs[1], out int y) &&
-                    (inputs[2].ToUpper() == "H" || inputs[2].ToUpper() == "V"))
+                if (!placedShips.Contains(selectedShip))
                 {
-                    string direction = inputs[2].ToUpper();
-                    bool placed = grid.PlaceShip(new Ship(selectedShip, shipLength), x, y, direction);
-
-                    if (placed)
+                    Console.WriteLine("\nEnter your coordinates and direction (H/V) \n Example: 2 5 H");
+                    string[]? inputs = Console.ReadLine()?.Split(' ');
+                    if (inputs?.Length == 3 &&
+                        int.TryParse(inputs[0], out int x) &&
+                        int.TryParse(inputs[1], out int y) &&
+                        (inputs[2].ToUpper() == "H" || inputs[2].ToUpper() == "V"))
                     {
-                        Console.WriteLine("Ship placed successfully!");
-                        shipsPlaced++;
+                        string direction = inputs[2].ToUpper();
+                        bool placed = grid.PlaceShip(new Ship(selectedShip, shipLength), x, y, direction);
+
+                        if (placed)
+                        {
+                            Console.WriteLine("Ship placed successfully!");
+                            placedShips.Add(selectedShip);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid placement! Try again.");
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("Invalid placement! Try again.");
+                        Console.WriteLine("Invalid format try again.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Invalid format try again.");
+                    Console.WriteLine("\nYou already placed that ship. Pick a different ship.");
                 }
             }
-            
-            //grid.PlaceShip(new Ship("Destroyer", 3), x, y, direction);
-            //grid.PlaceShip(new Ship("Battleship", 4), x, y, direction);
-            //grid.PlaceShip(new Ship("Carrier", 5), x, y, direction);
         }
 
         public void PlaceFleetAI()
