@@ -91,9 +91,9 @@
         public bool Attack(Grid enemyGrid)
         {
             Console.WriteLine("Select where to fire. \nFor example: '1 5' ");
-            string[]? inputs = Console.ReadLine()?.Split(' ');
             while (true)
             {
+                string[]? inputs = Console.ReadLine()?.Split(' ');
                 if (inputs?.Length == 2 &&
                             int.TryParse(inputs[0], out int x) &&
                             int.TryParse(inputs[1], out int y))
@@ -104,6 +104,7 @@
                 else
                 {
                     Console.WriteLine("Invalid format try again.");
+                    continue;
                 }
             }
             return true;

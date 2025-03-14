@@ -5,8 +5,8 @@
         private Grid grid;
         private Random rand;
         List<(int, int)> AIGuesses = new List<(int, int)>();
-        bool isHit = false;
-        List<(int, int)> AIHits = new List<(int, int)>();
+        List<(int, int)> shipCoord = new List<(int, int)>();
+        public bool shipHit;
         public AI()
         {
             grid = new Grid();
@@ -63,14 +63,51 @@
         public bool AIAttack(Grid enemyGrid)
         {
             int x, y;
-
-            x = rand.Next(10);
-            y = rand.Next(10); 
-
-            if (!AIGuesses.Contains((x, y))) 
+            if (shipHit == false)
             {
+                do
+                {
+                    x = rand.Next(10);
+                    y = rand.Next(10);
+                }
                 while (enemyGrid.MakeGuess(x, y));
                 AIGuesses.Add((x, y));
+                shipHit = enemyGrid.MakeGuess(x, y);
+                if (shipHit == true)
+                {
+                    shipCoord.Add((x, y));
+                }
+            }
+            else
+            {
+                (x, y) = shipCoord[0];
+                shipCoord.Remove((x, y));
+                int random = rand.Next(0, 2);
+
+                if (random == 0)
+                {
+                    int randomX = rand.Next(0, 2);
+                    if (randomX == 0 && x < 9)
+                    {
+                        x = x + 1;
+                    }
+                    if (x > 0)
+                    {
+                        x = x - 1;
+                    }
+                }
+                if (random == 1)
+                {
+                    int randomY = rand.Next(0, 2);
+                    if (randomY == 0 && y < 9)
+                    {
+                        y = y + 1;
+                    }
+                    if (y > 0)
+                    {
+                        y = y - 1;
+                    }
+                }
             }
             return true;
         }

@@ -21,7 +21,6 @@
 
                 Console.WriteLine("\nYour Board:");
                 playerGrid.DisplayBoard(false);
-                Console.ReadLine();
                 player.Attack(aiGrid);
 
                 shots++;

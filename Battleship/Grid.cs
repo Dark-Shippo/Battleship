@@ -5,6 +5,7 @@
         private char[,] Board;
         public List<Ship> Ships;
         private (int, int) BoardDimensions = (10, 10);
+        public int isHit;
         public Grid()
         {
             Board = new char[BoardDimensions.Item1, BoardDimensions.Item2];
@@ -20,7 +21,7 @@
 
         public void DisplayBoard(bool hideShips)
         {
-            string startLetter = "ABCDEFGHIJ";
+            string startLetter = "0123456789";
             for (int i = 0; i < BoardDimensions.Item1; i++)
             {
                 if (i == 0)
@@ -169,6 +170,7 @@
             if (Board[x, y] == 'S')
             {
                 Board[x, y] = 'X';
+                
                 foreach (var ship in Ships)
                 {
                     if (ship.Coordinates.Contains((x, y)))
@@ -180,6 +182,7 @@
             }
             if (Board[x, y] == '~')
             {
+                isHit = 0;
                 Board[x, y] = 'O';
             }
             return false;
