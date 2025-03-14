@@ -4,9 +4,8 @@
     {
         static void Main()
         {
-            bool isAI = false;
-            BasePlayer player = new BasePlayer(isAI);
-            BasePlayer ai = new BasePlayer(isAI = true);
+            BasePlayer player = new BasePlayer();
+            AI ai = new AI();
             Grid aiGrid = ai.GetGrid();
             Grid playerGrid = player.GetGrid();
             int shots = 0;
@@ -22,7 +21,6 @@
 
                 Console.WriteLine("\nYour Board:");
                 playerGrid.DisplayBoard(false);
-                Console.WriteLine("Enter to fire random shots");
                 Console.ReadLine();
                 player.Attack(aiGrid);
 
@@ -32,7 +30,7 @@
                     Console.WriteLine("You win in " + shots + " shots!");
                     break;
                 }
-                ai.Attack(playerGrid);
+                ai.AIAttack(playerGrid);
                 if (playerGrid.CheckWin())
                 {
                     Console.WriteLine("AI wins!");

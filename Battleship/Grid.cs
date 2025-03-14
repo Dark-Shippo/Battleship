@@ -86,14 +86,14 @@
             int startY = rnd.Next(0, 10);
 
 
-            while (direction == "H" && CheckBoundary(startX, ship, 0))
-            { 
-                startX = rnd.Next(0, 10); 
+            while (direction == "H" && !IsWithinBoundary(startX, ship, 0))
+            {
+                startX = rnd.Next(0, 10);
             }
 
-            while (direction == "V" && CheckBoundary(startY, ship, 1))
-            { 
-                startY = rnd.Next(0, 10); 
+            while (direction == "V" && !IsWithinBoundary(startY, ship, 1))
+            {
+                startY = rnd.Next(0, 10);
             }
 
             while (!isPlaced)
@@ -102,7 +102,6 @@
                 {
                     int x = startX;
                     int y = startY;
-
                     if (direction == "V")
                     {
                         y += i;
@@ -111,19 +110,26 @@
                     {
                         x += i;
                     }
-
                     while (Board[x, y] != '~' ||
-                            (direction == "H" && CheckBoundary(startX, ship, 0)) ||
-                            (direction == "V" && CheckBoundary(startY, ship, 1)))
+                            (direction == "H" && !IsWithinBoundary(startX, ship, 0)) ||
+                            (direction == "V" && !IsWithinBoundary(startY, ship, 1)))
                     {
-                        startX = rnd.Next(0, 10);
-                        startY = rnd.Next(0, 10);
+                        x = rnd.Next(0, 10);
+                        y = rnd.Next(0, 10);
+                        startX = x;
+                        startY = y;
                         direction = "H";
                         if (rnd.Next(0, 2) == 0)
                         {
                             direction = "V";
                         }
-
+                        if (Board[x, y] == '~' ||
+                                (direction == "H" && IsWithinBoundary(startX, ship, 0)) ||
+                                (direction == "V" && IsWithinBoundary(startY, ship, 1)))
+                        {
+                            i = -1;
+                        }
+                        continue;
                     }
                     tempCoordinates.Add((x, y));
                 }
@@ -151,7 +157,31 @@
                     }
                 }
             }
-            Board[x, y] = 'O';
+            if (Board[x, y] == '~')
+            {
+                Board[x, y] = 'O';
+            }
+            return false;
+        }
+
+        public bool AIMakeGuess(int x, int y)
+        {
+            if (Board[x, y] == 'S')
+            {
+                Board[x, y] = 'X';
+                foreach (var ship in Ships)
+                {
+                    if (ship.Coordinates.Contains((x, y)))
+                    {
+                        ship.Hits++;
+                        return true;
+                    }
+                }
+            }
+            if (Board[x, y] == '~')
+            {
+                Board[x, y] = 'O';
+            }
             return false;
         }
 
@@ -164,9 +194,9 @@
             return true;
         }
 
-        private bool CheckBoundary(int XYValue, Ship ship, int i)
+        private bool IsWithinBoundary(int XYValue, Ship ship, int i)
         {
-            if (!(XYValue + ship.Length < Board.GetLength(i)))
+            if ((XYValue + ship.Length < Board.GetLength(i)))
             {
                 return true;
             }

@@ -4,20 +4,11 @@
     {
         private Grid grid;
         private Random rand;
-
-        public BasePlayer(bool isAI)
+        public BasePlayer()
         {
             grid = new Grid();
             rand = new Random();
-
-            if (!isAI)
-            {
-                PlaceFleetPlayer();
-            }
-            else
-            {
-                PlaceFleetAI();
-            }
+            PlaceFleetPlayer();
         }
 
         public void PlaceFleetPlayer()
@@ -97,61 +88,24 @@
             }
         }
 
-        public void PlaceFleetAI()
-        {
-            Random random = new Random();
-
-            string direction = "H";
-            if (rand.Next(0, 2) == 0)
-            {
-                direction = "V";
-            }
-
-            grid.PlaceShipAI(new Ship("Cruiser", 2), direction);
-
-            direction = "H";
-            if (rand.Next(0, 2) == 0)
-            {
-                direction = "V";
-            }
-
-            grid.PlaceShipAI(new Ship("Submarine", 3), direction);
-
-            direction = "H";
-            if (rand.Next(0, 2) == 0)
-            {
-                direction = "V";
-            }
-
-            grid.PlaceShipAI(new Ship("Destroyer", 3), direction);
-
-            direction = "H";
-            if (rand.Next(0, 2) == 0)
-            {
-                direction = "V";
-            }
-
-            grid.PlaceShipAI(new Ship("Battleship", 4), direction);
-
-            direction = "H";
-            if (rand.Next(0, 2) == 0)
-            {
-                direction = "V";
-            }
-
-            grid.PlaceShipAI(new Ship("Carrier", 5), direction);
-
-        }
-
         public bool Attack(Grid enemyGrid)
         {
-            int x, y;
-            do
+            Console.WriteLine("Select where to fire. \nFor example: '1 5' ");
+            string[]? inputs = Console.ReadLine()?.Split(' ');
+            while (true)
             {
-                x = rand.Next(10);
-                y = rand.Next(10);
+                if (inputs?.Length == 2 &&
+                            int.TryParse(inputs[0], out int x) &&
+                            int.TryParse(inputs[1], out int y))
+                {
+                    while (enemyGrid.MakeGuess(x, y));
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid format try again.");
+                }
             }
-            while (enemyGrid.MakeGuess(x, y));
             return true;
         }
 
