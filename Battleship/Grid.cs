@@ -38,6 +38,22 @@
                     {
                         displayChar = '~';
                     }
+                    switch (displayChar)
+                    {
+                        case 'S':
+                            Console.ForegroundColor = ConsoleColor.Green; 
+                            break;
+                        case '~':
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            break;
+                        case 'X':
+                            Console.ForegroundColor = ConsoleColor.Red;   
+                            break;
+                        case 'O':
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            break;
+                    }
+                    
                     Console.Write(displayChar + " ");
                 }
                 Console.ResetColor();
