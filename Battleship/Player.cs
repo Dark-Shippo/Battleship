@@ -4,19 +4,20 @@
     {
         private Grid grid;
         private Random rand;
-        public BasePlayer()
+        public BasePlayer(string name)
         {
             grid = new Grid();
             rand = new Random();
-            PlaceFleetPlayer();
+            PlaceFleetPlayer(name);
         }
 
-        public void PlaceFleetPlayer()
+        public void PlaceFleetPlayer(string name)
         {
             List<string> placedShips = new List<string>(){};
             while (placedShips.Count < 5)
             {
-                Console.WriteLine("Select a ship to place! \n1. Cruiser \n2. Submarine \n3. Destroyer \n4. Battleship \n5. Carrier");
+                Console.Clear();
+                Console.WriteLine($"{name} Select a ship to place! \n1. Cruiser \n2. Submarine \n3. Destroyer \n4. Battleship \n5. Carrier");
                 grid.DisplayBoard(false);
                 ConsoleKeyInfo input = Console.ReadKey();
 
@@ -56,7 +57,7 @@
                 }
                 if (!placedShips.Contains(selectedShip))
                 {
-                    Console.WriteLine("\nEnter your coordinates and direction (H/V) \n Example: 2 5 H");
+                    Console.WriteLine("\nEnter your coordinates and direction (H/V) \n Example: 2 5 H for Row/Column/Direction");
                     string[]? inputs = Console.ReadLine()?.Split(' ');
                     if (inputs?.Length == 3 &&
                         int.TryParse(inputs[0], out int x) &&
@@ -88,9 +89,9 @@
             }
         }
 
-        public bool Attack(Grid enemyGrid)
+        public bool Attack(Grid enemyGrid, string name)
         {
-            Console.WriteLine("Select where to fire. \nFor example: '1 5' ");
+            Console.WriteLine($"{name}Select where to fire. \nFor example: 1 5 for Row/Column");
             while (true)
             {
                 string[]? inputs = Console.ReadLine()?.Split(' ');

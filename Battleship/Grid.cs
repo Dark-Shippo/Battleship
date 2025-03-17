@@ -2,10 +2,9 @@
 {
     class Grid
     {
-        private char[,] Board;
+        public char[,] Board;
         public List<Ship> Ships;
         private (int, int) BoardDimensions = (10, 10);
-        public int isHit;
         public Grid()
         {
             Board = new char[BoardDimensions.Item1, BoardDimensions.Item2];
@@ -182,7 +181,6 @@
             }
             if (Board[x, y] == '~')
             {
-                isHit = 0;
                 Board[x, y] = 'O';
             }
             return false;
