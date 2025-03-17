@@ -32,12 +32,14 @@ namespace Battleship
                 Grid aiGrid = ai.GetGrid();
                 Grid playerGrid = player.GetGrid();
                 int shots = 0;
+                Random rand = new Random();
 
                 while (true)
                 {
+                    string[] AINames = { "Clank", "Shodan", "BuzzBot", "XJ9", "BurgerBot", "Hal9000", "SH1P-P0", "Bender", "WALL-E"};
                     Console.Clear();
-                    Console.WriteLine($"Clank's Board ({shots} Fired):");
-                    aiGrid.DisplayBoard(false);
+                    Console.WriteLine($"{AINames[rand.Next(AINames.Length)]}'s Board ({shots} Shots Fired):");
+                    aiGrid.DisplayBoard(true);
 
                     Console.WriteLine("\nYour Board:");
                     playerGrid.DisplayBoard(false);
